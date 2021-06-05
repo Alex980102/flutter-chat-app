@@ -1,4 +1,7 @@
+import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
+import 'package:chat_app_flutter/widgets/labels.widget.dart';
+import 'package:chat_app_flutter/widgets/logo.widget.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -7,47 +10,31 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Color(0xffF2F2F2),
         body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _logo(),
-              _Form(),
-              _Labels(),
-              Text(
-                'terms and Conditions',
-                style: TextStyle(fontWeight: FontWeight.w200),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  logo(
+                    title: 'Log In',
+                  ),
+                  _Form(),
+                  Labels(
+                    subtitle: 'Do not have an account',
+                    tile: 'Create an acount',
+                    ruta: 'register',
+                  ),
+                  Text(
+                    'terms and Conditions',
+                    style: TextStyle(fontWeight: FontWeight.w200),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ));
-  }
-}
-
-class _logo extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 170,
-        margin: EdgeInsets.only(top: 50),
-        child: Column(
-          children: <Widget>[
-            Image(image: AssetImage('assets/logo.png')),
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              'Beo',
-              style: TextStyle(fontSize: 25),
-            ),
-            Text(
-              'Messenger',
-              style: TextStyle(fontSize: 25),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -57,6 +44,14 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
+  final emailCtrl = TextEditingController();
+  final passCtrl = TextEditingController();
+  final ButtonStyle style = ElevatedButton.styleFrom(
+    primary: Colors.amber,
+    elevation: 2,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(2))),
+  );
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,43 +59,29 @@ class __FormState extends State<_Form> {
       padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: <Widget>[
-          CustomInput(),
-          CustomInput(),
-          CustomInput()
-          // TODO: Create button
+          CustomInput(
+            icon: Icons.mail_outline,
+            placeholder: 'Email',
+            keyboardType: TextInputType.emailAddress,
+            textController: emailCtrl,
+          ),
+          CustomInput(
+            icon: Icons.lock_outlined,
+            placeholder: 'Password',
+            textController: passCtrl,
+            isPassword: true,
+          ),
           /* ElevatedButton(
+            style: style,
             onPressed: () {},
             child: Text('Hola'),
-          ) */
-        ],
-      ),
-    );
-  }
-}
-
-class _Labels extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Text(
-            'Do not have an acount?',
-            style: TextStyle(
-                color: Colors.black54,
-                fontSize: 15,
-                fontWeight: FontWeight.w300),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Create an acount',
-            style: TextStyle(
-                color: Colors.blue[600],
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
-          )
+          ), */
+          BlueButton(
+              text: 'Log In',
+              onPressed: () {
+                print(emailCtrl.text);
+                print(passCtrl.text);
+              })
         ],
       ),
     );
