@@ -1,3 +1,4 @@
+import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
 import 'package:chat_app_flutter/widgets/labels.widget.dart';
 import 'package:chat_app_flutter/widgets/logo.widget.dart';
@@ -11,17 +12,20 @@ class LoginPage extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                logo(),
-                _Form(),
-                Labels(),
-                Text(
-                  'terms and Conditions',
-                  style: TextStyle(fontWeight: FontWeight.w200),
-                ),
-              ],
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  logo(),
+                  _Form(),
+                  Labels(),
+                  Text(
+                    'terms and Conditions',
+                    style: TextStyle(fontWeight: FontWeight.w200),
+                  ),
+                ],
+              ),
             ),
           ),
         ));
@@ -36,6 +40,12 @@ class _Form extends StatefulWidget {
 class __FormState extends State<_Form> {
   final emailCtrl = TextEditingController();
   final passCtrl = TextEditingController();
+  final ButtonStyle style = ElevatedButton.styleFrom(
+    primary: Colors.amber,
+    elevation: 2,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(2))),
+  );
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,13 +65,17 @@ class __FormState extends State<_Form> {
             textController: passCtrl,
             isPassword: true,
           ),
-          ElevatedButton(
-            onPressed: () {
-              print(emailCtrl.text);
-              print(passCtrl.text);
-            },
+          /* ElevatedButton(
+            style: style,
+            onPressed: () {},
             child: Text('Hola'),
-          )
+          ), */
+          BlueButton(
+              text: 'Hola mundo',
+              onPressed: () {
+                print(emailCtrl.text);
+                print(passCtrl.text);
+              })
         ],
       ),
     );
