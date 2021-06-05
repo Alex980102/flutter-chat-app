@@ -17,9 +17,15 @@ class LoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  logo(),
+                  logo(
+                    title: 'Log In',
+                  ),
                   _Form(),
-                  Labels(),
+                  Labels(
+                    subtitle: 'Do not have an account',
+                    tile: 'Create an acount',
+                    ruta: 'register',
+                  ),
                   Text(
                     'terms and Conditions',
                     style: TextStyle(fontWeight: FontWeight.w200),
@@ -71,7 +77,7 @@ class __FormState extends State<_Form> {
             child: Text('Hola'),
           ), */
           BlueButton(
-              text: 'Hola mundo',
+              text: 'Log In',
               onPressed: () {
                 print(emailCtrl.text);
                 print(passCtrl.text);
