@@ -3,12 +3,24 @@ import 'package:flutter/material.dart';
 class ChatMessage extends StatelessWidget {
   final String text;
   final String uid;
-  const ChatMessage({Key? key, required this.text, required this.uid})
+  final AnimationController animationController;
+  const ChatMessage(
+      {Key? key,
+      required this.text,
+      required this.uid,
+      required this.animationController})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: this.uid == '123' ? _myMesssage() : _notMyMessages(),
+    return FadeTransition(
+      opacity: animationController,
+      child: SizeTransition(
+        sizeFactor: CurvedAnimation(
+            parent: animationController, curve: Curves.fastLinearToSlowEaseIn),
+        child: Container(
+          child: this.uid == '123' ? _myMesssage() : _notMyMessages(),
+        ),
+      ),
     );
   }
 
