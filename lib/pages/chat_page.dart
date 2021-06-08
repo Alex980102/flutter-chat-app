@@ -9,43 +9,10 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final _textController = new TextEditingController();
   final _focusNode = new FocusNode();
-  List<ChatMessage> _messages = [
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(
-        uid: '123',
-        text:
-            'Non aliqua occaecat fugiat dolor nostrud aute id dolore amet cillum qui ipsum est.'),
-    ChatMessage(
-        uid: '12w1w13',
-        text:
-            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(
-        uid: '123',
-        text:
-            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(
-        uid: '1232121',
-        text:
-            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(
-        uid: '123',
-        text:
-            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(
-        uid: '1232121',
-        text:
-            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-    ChatMessage(uid: '123', text: 'Hola mundo'),
-  ];
+  List<ChatMessage> _messages = [];
   bool _isWriting = false;
   @override
   Widget build(BuildContext context) {
@@ -169,12 +136,19 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _handleSubmit(String text) {
+    if (text.length == 0) return;
     print(text);
     _textController.clear();
     _focusNode.requestFocus();
-    final newMessage = new ChatMessage(text: text, uid: '123');
+    final newMessage = new ChatMessage(
+      text: text,
+      uid: '123',
+      animationController: AnimationController(
+          vsync: this, duration: Duration(milliseconds: 600)),
+    );
 
     _messages.insert(0, newMessage);
+    newMessage.animationController.forward();
     setState(() {
       _isWriting = false;
     });
