@@ -168,10 +168,13 @@ class _ChatPageState extends State<ChatPage> {
     ));
   }
 
-  _handleSubmit(String texto) {
-    print(texto);
+  _handleSubmit(String text) {
+    print(text);
     _textController.clear();
     _focusNode.requestFocus();
+    final newMessage = new ChatMessage(text: text, uid: '123');
+
+    _messages.insert(0, newMessage);
     setState(() {
       _isWriting = false;
     });
