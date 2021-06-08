@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:chat_app_flutter/pages/chat_message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +12,40 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _textController = new TextEditingController();
   final _focusNode = new FocusNode();
+  List<ChatMessage> _messages = [
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(
+        uid: '123',
+        text:
+            'Non aliqua occaecat fugiat dolor nostrud aute id dolore amet cillum qui ipsum est.'),
+    ChatMessage(
+        uid: '12w1w13',
+        text:
+            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(
+        uid: '123',
+        text:
+            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(
+        uid: '1232121',
+        text:
+            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(
+        uid: '123',
+        text:
+            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(
+        uid: '1232121',
+        text:
+            'Irure consectetur irure eiusmod mollit. Sit ex consequat dolore anim dolore do mollit voluptate cupidatat laborum. Adipisicing non pariatur labore officia. Proident cillum sint ad Lorem occaecat sunt commodo in excepteur deserunt excepteur.'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+    ChatMessage(uid: '123', text: 'Hola mundo'),
+  ];
   bool _isWriting = false;
   @override
   Widget build(BuildContext context) {
@@ -40,17 +75,23 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
               child: ListView.builder(
                 physics: BouncingScrollPhysics(),
-                itemBuilder: (_, i) => Text('$i'),
+                itemCount: _messages.length,
+                itemBuilder: (_, i) => _messages[i],
                 reverse: true,
               ),
             ),
             Divider(height: 1),
             // TODO: Caja de texto
-            Container(
-              color: Colors.white,
-              height: 100,
+            SafeArea(
+                child: Container(
+              margin: EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+              decoration: BoxDecoration(
+                  color: Colors.blue[50],
+                  borderRadius: BorderRadius.circular(20)),
+              /* color: Colors.blue[100],
+              height: 50, */
               child: _inputChat(),
-            )
+            )),
           ],
         ),
       ),
@@ -85,7 +126,22 @@ class _ChatPageState extends State<ChatPage> {
           // Send Button
           Container(
             margin: EdgeInsets.symmetric(horizontal: 4.0),
-            child: Platform.isIOS
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 0),
+              child: IconTheme(
+                data: IconThemeData(color: Colors.blue[400]),
+                child: IconButton(
+                  highlightColor: Colors.transparent,
+                  splashColor: Colors.transparent,
+                  icon: Icon(Icons.send),
+                  onPressed: _isWriting
+                      ? () => _handleSubmit(_textController.text.trim())
+                      : null,
+                ),
+              ),
+            ),
+
+            /* Platform.isIOS
                 ? CupertinoButton(
                     child: Text('Send'),
                     onPressed: _isWriting
@@ -93,7 +149,7 @@ class _ChatPageState extends State<ChatPage> {
                         : null,
                   )
                 : Container(
-                    margin: EdgeInsets.symmetric(horizontal: 4.0),
+                    margin: EdgeInsets.symmetric(horizontal: 0),
                     child: IconTheme(
                       data: IconThemeData(color: Colors.blue[400]),
                       child: IconButton(
@@ -105,7 +161,7 @@ class _ChatPageState extends State<ChatPage> {
                             : null,
                       ),
                     ),
-                  ),
+                  ), */
           ),
         ],
       ),
