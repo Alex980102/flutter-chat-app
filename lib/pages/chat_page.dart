@@ -84,7 +84,7 @@ class _ChatPageState extends State<ChatPage> {
             // TODO: Caja de texto
             SafeArea(
                 child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
+              margin: EdgeInsets.only(left: 10, right: 10, top: 2),
               decoration: BoxDecoration(
                   color: Colors.blue[50],
                   borderRadius: BorderRadius.circular(20)),
@@ -126,22 +126,7 @@ class _ChatPageState extends State<ChatPage> {
           // Send Button
           Container(
             margin: EdgeInsets.symmetric(horizontal: 4.0),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 0),
-              child: IconTheme(
-                data: IconThemeData(color: Colors.blue[400]),
-                child: IconButton(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
-                  icon: Icon(Icons.send),
-                  onPressed: _isWriting
-                      ? () => _handleSubmit(_textController.text.trim())
-                      : null,
-                ),
-              ),
-            ),
-
-            /* Platform.isIOS
+            child: Platform.isIOS
                 ? CupertinoButton(
                     child: Text('Send'),
                     onPressed: _isWriting
@@ -161,17 +146,20 @@ class _ChatPageState extends State<ChatPage> {
                             : null,
                       ),
                     ),
-                  ), */
+                  ),
           ),
         ],
       ),
     ));
   }
 
-  _handleSubmit(String texto) {
-    print(texto);
+  _handleSubmit(String text) {
+    print(text);
     _textController.clear();
     _focusNode.requestFocus();
+    final newMessage = new ChatMessage(text: text, uid: '123');
+
+    _messages.insert(0, newMessage);
     setState(() {
       _isWriting = false;
     });
