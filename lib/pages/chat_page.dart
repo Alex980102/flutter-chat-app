@@ -11,6 +11,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _textController = new TextEditingController();
   final _focusNode = new FocusNode();
+  bool _isWriting = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +68,13 @@ class _ChatPageState extends State<ChatPage> {
               controller: _textController,
               onSubmitted: _handleSubmit,
               onChanged: (String text) {
-                // TODO: Cuando hay un valor para poder postear
+                setState(() {
+                  if (text.trim().length > 0) {
+                    _isWriting = true;
+                  } else {
+                    _isWriting = false;
+                  }
+                });
               },
               decoration: InputDecoration.collapsed(
                 hintText: 'Send Message',
@@ -81,13 +88,22 @@ class _ChatPageState extends State<ChatPage> {
             child: Platform.isIOS
                 ? CupertinoButton(
                     child: Text('Send'),
-                    onPressed: () {},
+                    onPressed: _isWriting
+                        ? () => _handleSubmit(_textController.text.trim())
+                        : null,
                   )
                 : Container(
                     margin: EdgeInsets.symmetric(horizontal: 4.0),
-                    child: IconButton(
-                      icon: Icon(Icons.send, color: Colors.blue[400]),
-                      onPressed: () {},
+                    child: IconTheme(
+                      data: IconThemeData(color: Colors.blue[400]),
+                      child: IconButton(
+                        highlightColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        icon: Icon(Icons.send),
+                        onPressed: _isWriting
+                            ? () => _handleSubmit(_textController.text.trim())
+                            : null,
+                      ),
                     ),
                   ),
           ),
@@ -100,5 +116,8 @@ class _ChatPageState extends State<ChatPage> {
     print(texto);
     _textController.clear();
     _focusNode.requestFocus();
+    setState(() {
+      _isWriting = false;
+    });
   }
 }
