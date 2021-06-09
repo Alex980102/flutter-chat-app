@@ -1,8 +1,10 @@
+import 'package:chat_app_flutter/services/auth_service.dart';
 import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
 import 'package:chat_app_flutter/widgets/labels.widget.dart';
 import 'package:chat_app_flutter/widgets/logo.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -81,6 +83,9 @@ class __FormState extends State<_Form> {
               onPressed: () {
                 print(emailCtrl.text);
                 print(passCtrl.text);
+                final authService =
+                    Provider.of<AuthService>(context, listen: false);
+                authService.login(emailCtrl.text, passCtrl.text);
               })
         ],
       ),
