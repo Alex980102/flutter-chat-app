@@ -1,3 +1,4 @@
+import 'package:chat_app_flutter/helpers/show_alert.dart';
 import 'package:chat_app_flutter/services/auth_service.dart';
 import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
@@ -46,8 +47,8 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
-  final emailCtrl = TextEditingController();
-  final passCtrl = TextEditingController();
+  final emailCtrl = TextEditingController(text: 'test2@test.com');
+  final passCtrl = TextEditingController(text: '123456');
   final ButtonStyle style = ElevatedButton.styleFrom(
     primary: Colors.amber,
     elevation: 2,
@@ -83,10 +84,19 @@ class __FormState extends State<_Form> {
               text: 'Log In',
               onPressed: authService.authentic
                   ? null
-                  : () {
+                  : () async {
                       FocusScope.of(context).unfocus();
-                      authService.login(
+                      final loginOk = await authService.login(
                           emailCtrl.text.trim(), passCtrl.text.trim());
+                      if (loginOk) {
+                        // TODO: Navegar a otra pantalla y navegar a los sockets
+                      } else {
+                        // TODO: Mostrar alerta
+                        showAlert(
+                            context,
+                            'There was a problem trying to login ',
+                            'Check your email and password or create an account.');
+                      }
                     })
         ],
       ),
