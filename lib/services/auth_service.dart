@@ -15,16 +15,21 @@ class AuthService with ChangeNotifier {
     notifyListeners();
   }
 
-  Future login(String email, String password) async {
+  Future<bool> login(String email, String password) async {
     this.authentic = true;
     final data = {'email': email, 'password': password};
     final res = await http.post(Uri.parse('${Environment.apiUrl}/login'),
         body: jsonEncode(data), headers: {'Content-Type': 'application/json'});
+
+    print(res.body);
+    this.authentic = false;
     if (res.statusCode == 200) {
       final loginResponse = loginResponseFromJson(res.body);
       this.user = loginResponse.user;
+      // TODO: Guardar token en lugar seguro
+      return true;
+    } else {
+      return false;
     }
-    this.authentic = false;
-    print(res.body);
   }
 }
