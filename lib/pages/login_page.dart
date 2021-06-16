@@ -90,6 +90,7 @@ class __FormState extends State<_Form> {
                           emailCtrl.text.trim(), passCtrl.text.trim());
                       if (loginOk) {
                         // TODO: Navegar a otra pantalla y navegar a los sockets
+                        Navigator.pushReplacementNamed(context, 'users');
                       } else {
                         // TODO: Mostrar alerta
                         showAlert(
