@@ -5,6 +5,7 @@ import 'package:chat_app_flutter/models/login_response.model.dart';
 import 'package:chat_app_flutter/models/user.model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService with ChangeNotifier {
   late User user;
@@ -13,6 +14,18 @@ class AuthService with ChangeNotifier {
   set authentic(bool auth) {
     this._authentic = auth;
     notifyListeners();
+  }
+
+  // Getters del token de forma estática
+  static Future<String> getToken() async {
+    final _storage = await SharedPreferences.getInstance();
+    final token = _storage.getString('token') ?? 'Zero';
+    return token;
+  }
+
+  static Future<void> deleteToken() async {
+    final _storage = await SharedPreferences.getInstance();
+    _storage.remove('token');
   }
 
   Future<bool> login(String email, String password) async {
@@ -26,10 +39,20 @@ class AuthService with ChangeNotifier {
     if (res.statusCode == 200) {
       final loginResponse = loginResponseFromJson(res.body);
       this.user = loginResponse.user;
-      // TODO: Guardar token en lugar seguro
+      await this._saveToken(loginResponse.token);
       return true;
     } else {
       return false;
     }
+  }
+
+  Future _saveToken(String token) async {
+    final _storage = await SharedPreferences.getInstance();
+    return _storage.setString('token', token);
+  }
+
+  Future _logOut() async {
+    final _storage = await SharedPreferences.getInstance();
+    return _storage.remove('token');
   }
 }

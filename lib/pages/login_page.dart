@@ -89,7 +89,8 @@ class __FormState extends State<_Form> {
                       final loginOk = await authService.login(
                           emailCtrl.text.trim(), passCtrl.text.trim());
                       if (loginOk) {
-                        // TODO: Navegar a otra pantalla y navegar a los sockets
+                        // TODO: Conectar a nuestro socket server
+                        Navigator.pushReplacementNamed(context, 'users');
                       } else {
                         // TODO: Mostrar alerta
                         showAlert(
