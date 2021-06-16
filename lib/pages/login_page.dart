@@ -85,12 +85,11 @@ class __FormState extends State<_Form> {
               onPressed: authService.authentic
                   ? null
                   : () async {
-                      //FocusScope.of(context).unfocus();
+                      FocusScope.of(context).unfocus();
                       final loginOk = await authService.login(
                           emailCtrl.text.trim(), passCtrl.text.trim());
                       if (loginOk) {
-                        // TODO: Navegar a otra pantalla y navegar a los sockets y conectar al soket server
-                        Navigator.pushReplacementNamed(context, 'users');
+                        // TODO: Navegar a otra pantalla y navegar a los sockets
                       } else {
                         // TODO: Mostrar alerta
                         showAlert(
