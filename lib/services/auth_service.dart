@@ -48,6 +48,31 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  Future cretaAcount(String name, String email, String password) async {
+    try {
+      this.authentic = true;
+      final data = {'name': name, 'email': email, 'password': password};
+      final res = await http.post(Uri.parse('${Environment.apiUrl}/login/new'),
+          body: jsonEncode(data),
+          headers: {'Content-Type': 'application/json'});
+      print(res.body);
+      this.authentic = false;
+      final response = jsonDecode(res.body);
+      if (res.statusCode == 200) {
+        final loginResponse = loginResponseFromJson(res.body);
+        this.user = loginResponse.user;
+        await this._saveToekn(loginResponse.token);
+        return response;
+      }
+      if (res.statusCode == 400) {
+        return response;
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   Future _saveToekn(String token) async {
     return await _storage.write(key: 'token', value: token);
   }

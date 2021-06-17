@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:chat_app_flutter/helpers/show_alert.dart';
+import 'package:chat_app_flutter/services/auth_service.dart';
 import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
 import 'package:chat_app_flutter/widgets/labels.widget.dart';
 import 'package:chat_app_flutter/widgets/logo.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -55,6 +60,7 @@ class __FormState extends State<_Form> {
   );
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -84,12 +90,23 @@ class __FormState extends State<_Form> {
             child: Text('Hola'),
           ), */
           BlueButton(
-              text: 'Create Acount',
-              onPressed: () {
-                print(nameCtrl.text);
-                print(emailCtrl.text);
-                print(passCtrl.text);
-              })
+            text: 'Create Acount',
+            onPressed: authService.authentic
+                ? null
+                : () async {
+                    final registerOk = await authService.cretaAcount(
+                      nameCtrl.text.trim(),
+                      emailCtrl.text.trim(),
+                      passCtrl.text.trim(),
+                    );
+                    if (registerOk["ok"]) {
+                      Navigator.pushReplacementNamed(context, 'users');
+                    } else {
+                      showAlert(
+                          context, registerOk["title"], registerOk["msg"]);
+                    }
+                  },
+          )
         ],
       ),
     );
