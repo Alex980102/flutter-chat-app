@@ -66,7 +66,7 @@ class __FormState extends State<_Form> {
         children: <Widget>[
           CustomInput(
             icon: Icons.perm_identity,
-            placeholder: 'Nombre',
+            placeholder: 'Name',
             keyboardType: TextInputType.text,
             textController: nameCtrl,
           ),

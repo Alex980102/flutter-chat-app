@@ -11,6 +11,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // TODO: Modify Accent color For beotech
+        // TODO: Change login and register color To a responsive one
         backgroundColor: Color(0xffF2F2F2),
         body: SafeArea(
           child: SingleChildScrollView(
