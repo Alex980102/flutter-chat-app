@@ -94,16 +94,71 @@ class __FormState extends State<_Form> {
             onPressed: authService.authentic
                 ? null
                 : () async {
-                    final registerOk = await authService.cretaAcount(
-                      nameCtrl.text.trim(),
-                      emailCtrl.text.trim(),
-                      passCtrl.text.trim(),
-                    );
-                    if (registerOk["ok"]) {
-                      Navigator.pushReplacementNamed(context, 'users');
-                    } else {
-                      showAlert(
-                          context, registerOk["title"], registerOk["msg"]);
+                    try {
+                      final registerOk = await authService.cretaAcount(
+                        nameCtrl.text.trim(),
+                        emailCtrl.text.trim(),
+                        passCtrl.text.trim(),
+                      );
+                      if (registerOk.containsKey("errors")) {
+                        Map _errors = registerOk["errors"];
+                        if (_errors.containsKey("email") &&
+                            _errors.containsKey("password") &&
+                            _errors.containsKey("name")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["name"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["email"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["password"]["msg"]);
+                        }
+                        if (_errors.containsKey("email") &&
+                            _errors.containsKey("name")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["email"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["name"]["msg"]);
+                        }
+                        if (_errors.containsKey("name") &&
+                            _errors.containsKey("password")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["name"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["password"]["msg"]);
+                        }
+                        if (_errors.containsKey("email") &&
+                            _errors.containsKey("password")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["email"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["password"]["msg"]);
+                        }
+                        if (_errors.containsKey("email")) {
+                          return showAlert(context, "Error",
+                              registerOk["errors"]["email"]["msg"]);
+                        }
+                        if (_errors.containsKey("password")) {
+                          return showAlert(context, "Error",
+                              registerOk["errors"]["password"]["msg"]);
+                        }
+                      }
+                      if (registerOk["ok"]) {
+                        return Navigator.pushReplacementNamed(context, 'users');
+                      } else {
+                        showAlert(
+                            context, registerOk["title"], registerOk["msg"]);
+                      }
+                    } catch (e) {
+                      print(e);
+                      showAlert(context, 'Error', 'Unknown error');
                     }
                   },
           )
