@@ -31,7 +31,8 @@ class CustomInput extends StatelessWidget {
               blurRadius: 5)
         ],
       ),
-      child: TextField(
+      child: TextFormField(
+        // TODO: Implement text validator
         controller: this.textController,
         autocorrect: false,
         keyboardType: this.keyboardType,
