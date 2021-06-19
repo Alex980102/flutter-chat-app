@@ -71,12 +71,29 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  Future isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '0';
+    final res = await http.get(Uri.parse('${Environment.apiUrl}/login/renew'),
+        headers: {'Content-Type': 'application/json', 'x-token': token});
+    print(res.body);
+    if (res.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(res.body);
+      this.user = loginResponse.user;
+      await this._saveToken(loginResponse.token);
+      return true;
+    } else {
+      this.logOut();
+      return false;
+    }
+  }
+
   Future _saveToken(String token) async {
     final _storage = await SharedPreferences.getInstance();
     return _storage.setString('token', token);
   }
 
-  Future _logOut() async {
+  Future logOut() async {
     final _storage = await SharedPreferences.getInstance();
     return _storage.remove('token');
   }
