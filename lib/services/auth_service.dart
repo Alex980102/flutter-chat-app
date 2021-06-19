@@ -41,7 +41,7 @@ class AuthService with ChangeNotifier {
       final loginResponse = loginResponseFromJson(res.body);
       this.user = loginResponse.user;
       // TODO: Guardar token en lugar seguro
-      await this._saveToekn(loginResponse.token);
+      await this._saveToken(loginResponse.token);
       return true;
     } else {
       return false;
@@ -61,7 +61,7 @@ class AuthService with ChangeNotifier {
       if (res.statusCode == 200) {
         final loginResponse = loginResponseFromJson(res.body);
         this.user = loginResponse.user;
-        await this._saveToekn(loginResponse.token);
+        await this._saveToken(loginResponse.token);
         return response;
       }
       if (res.statusCode == 400) {
@@ -73,7 +73,24 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future _saveToekn(String token) async {
+  Future isLoggedIn() async {
+    final token = await this._storage.read(key: 'token');
+    final res = await http.get(Uri.parse('${Environment.apiUrl}/login/renew'),
+        headers: {'Content-Type': 'application/json', 'x-token': '$token'});
+    print(res.body);
+
+    if (res.statusCode == 200) {
+      final loginResponse = loginResponseFromJson(res.body);
+      this.user = loginResponse.user;
+      await this._saveToken(loginResponse.token);
+      return true;
+    } else {
+      this.logout();
+      return false;
+    }
+  }
+
+  Future _saveToken(String token) async {
     return await _storage.write(key: 'token', value: token);
   }
 
