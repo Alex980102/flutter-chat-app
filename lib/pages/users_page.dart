@@ -1,5 +1,6 @@
 import 'package:chat_app_flutter/models/user.model.dart';
 import 'package:chat_app_flutter/services/auth_service.dart';
+import 'package:chat_app_flutter/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -20,22 +21,18 @@ class _UserPageState extends State<UserPage> {
         online: true),
     User(
         email: 'alex2.9802@hotmail.com',
-        name: 'Alejandro2',
+        name: 'Miguel',
         uid: '2',
         online: false),
-    User(
-        email: 'alex3.9802@hotmail.com',
-        name: 'Alejandro3',
-        uid: '3',
-        online: true)
+    User(email: 'alex3.9802@hotmail.com', name: 'Luisa', uid: '3', online: true)
   ];
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     final user = authService.user;
     return Scaffold(
         appBar: AppBar(
-          // TODO: Insert name of the user
           title: Text(
             user.name,
             style: TextStyle(color: Colors.black87),
@@ -49,6 +46,7 @@ class _UserPageState extends State<UserPage> {
             ),
             // TODO: Disconnect to socket server
             onPressed: () {
+              socketService.disconnect();
               AuthService.deleteToken();
               Navigator.restorablePushReplacementNamed(context, 'login');
             },
