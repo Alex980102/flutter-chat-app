@@ -1,13 +1,18 @@
+import 'package:chat_app_flutter/helpers/show_alert.dart';
+import 'package:chat_app_flutter/services/auth_service.dart';
 import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
 import 'package:chat_app_flutter/widgets/labels.widget.dart';
 import 'package:chat_app_flutter/widgets/logo.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // TODO: Modify Accent color For beotech
+        // TODO: Change login and register color To a responsive one
         backgroundColor: Color(0xffF2F2F2),
         body: SafeArea(
           child: SingleChildScrollView(
@@ -44,8 +49,8 @@ class _Form extends StatefulWidget {
 }
 
 class __FormState extends State<_Form> {
-  final emailCtrl = TextEditingController();
-  final passCtrl = TextEditingController();
+  final emailCtrl = TextEditingController(text: 'test2@test.com');
+  final passCtrl = TextEditingController(text: '123456');
   final ButtonStyle style = ElevatedButton.styleFrom(
     primary: Colors.amber,
     elevation: 2,
@@ -54,6 +59,7 @@ class __FormState extends State<_Form> {
   );
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -78,10 +84,23 @@ class __FormState extends State<_Form> {
           ), */
           BlueButton(
               text: 'Log In',
-              onPressed: () {
-                print(emailCtrl.text);
-                print(passCtrl.text);
-              })
+              onPressed: authService.authentic
+                  ? null
+                  : () async {
+                      FocusScope.of(context).unfocus();
+                      final loginOk = await authService.login(
+                          emailCtrl.text.trim(), passCtrl.text.trim());
+                      if (loginOk) {
+                        // TODO: Conectar a nuestro socket server
+                        Navigator.pushReplacementNamed(context, 'users');
+                      } else {
+                        // TODO: Mostrar alerta
+                        showAlert(
+                            context,
+                            'There was a problem trying to login ',
+                            'Check your email and password or create an account.');
+                      }
+                    })
         ],
       ),
     );

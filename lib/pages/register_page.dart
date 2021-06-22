@@ -1,8 +1,11 @@
+import 'package:chat_app_flutter/helpers/show_alert.dart';
+import 'package:chat_app_flutter/services/auth_service.dart';
 import 'package:chat_app_flutter/widgets/btn_blue.dart';
 import 'package:chat_app_flutter/widgets/custom_input.dart';
 import 'package:chat_app_flutter/widgets/labels.widget.dart';
 import 'package:chat_app_flutter/widgets/logo.widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -55,6 +58,7 @@ class __FormState extends State<_Form> {
   );
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Container(
       margin: EdgeInsets.only(top: 40),
       padding: EdgeInsets.symmetric(horizontal: 50),
@@ -62,7 +66,7 @@ class __FormState extends State<_Form> {
         children: <Widget>[
           CustomInput(
             icon: Icons.perm_identity,
-            placeholder: 'Nombre',
+            placeholder: 'Name',
             keyboardType: TextInputType.text,
             textController: nameCtrl,
           ),
@@ -84,12 +88,78 @@ class __FormState extends State<_Form> {
             child: Text('Hola'),
           ), */
           BlueButton(
-              text: 'Create Acount',
-              onPressed: () {
-                print(nameCtrl.text);
-                print(emailCtrl.text);
-                print(passCtrl.text);
-              })
+            text: 'Create Acount',
+            onPressed: authService.authentic
+                ? null
+                : () async {
+                    try {
+                      final registerOk = await authService.cretaAcount(
+                        nameCtrl.text.trim(),
+                        emailCtrl.text.trim(),
+                        passCtrl.text.trim(),
+                      );
+                      if (registerOk.containsKey("errors")) {
+                        Map _errors = registerOk["errors"];
+                        if (_errors.containsKey("email") &&
+                            _errors.containsKey("password") &&
+                            _errors.containsKey("name")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["name"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["email"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["password"]["msg"]);
+                        }
+                        if (_errors.containsKey("email") &&
+                            _errors.containsKey("name")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["email"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["name"]["msg"]);
+                        }
+                        if (_errors.containsKey("name") &&
+                            _errors.containsKey("password")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["name"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["password"]["msg"]);
+                        }
+                        if (_errors.containsKey("email") &&
+                            _errors.containsKey("password")) {
+                          return showAlert(
+                              context,
+                              "Error",
+                              registerOk["errors"]["email"]["msg"] +
+                                  "\n" +
+                                  registerOk["errors"]["password"]["msg"]);
+                        }
+                        if (_errors.containsKey("email")) {
+                          return showAlert(context, "Error",
+                              registerOk["errors"]["email"]["msg"]);
+                        }
+                        if (_errors.containsKey("password")) {
+                          return showAlert(context, "Error",
+                              registerOk["errors"]["password"]["msg"]);
+                        }
+                      }
+                      if (registerOk["ok"]) {
+                        return Navigator.pushReplacementNamed(context, 'users');
+                      } else {
+                        showAlert(
+                            context, registerOk["title"], registerOk["msg"]);
+                      }
+                    } catch (e) {
+                      print(e);
+                      showAlert(context, 'Error', 'Unknown error');
+                    }
+                  },
+          )
         ],
       ),
     );
