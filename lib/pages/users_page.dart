@@ -1,5 +1,6 @@
 import 'package:chat_app_flutter/models/user.model.dart';
 import 'package:chat_app_flutter/services/auth_service.dart';
+import 'package:chat_app_flutter/services/chat.service.dart';
 import 'package:chat_app_flutter/services/socket_service.dart';
 import 'package:chat_app_flutter/services/users_service.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +18,7 @@ class _UserPageState extends State<UserPage> {
       RefreshController(initialRefresh: false);
 
   List<dynamic> users = [];
-/*   final users = [
-    User(
-        email: 'alex.9802@hotmail.com',
-        name: 'Alejandro',
-        uid: '1',
-        online: true),
-    User(
-        email: 'alex2.9802@hotmail.com',
-        name: 'Miguel',
-        uid: '2',
-        online: false),
-    User(email: 'alex3.9802@hotmail.com', name: 'Luisa', uid: '3', online: true)
-  ]; */
+
   @override
   void initState() {
     this._loadUsers();
@@ -112,6 +101,11 @@ class _UserPageState extends State<UserPage> {
             color: user.online ? Colors.green[300] : Colors.red,
             borderRadius: BorderRadius.circular(100)),
       ),
+      onTap: () {
+        final chatService = Provider.of<ChatService>(context, listen: false);
+        chatService.userFor = user;
+        Navigator.pushNamed(context, 'chat');
+      },
     );
   }
 
