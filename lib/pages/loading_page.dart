@@ -26,9 +26,9 @@ class LoadingPage extends StatelessWidget {
 
     if (authenticated) {
       socketService.connect();
-      Navigator.pushReplacementNamed(context, 'users');
+      Navigator.pushNamed(context, 'users');
     } else {
-      Navigator.pushReplacementNamed(context, 'login');
+      Navigator.pushNamed(context, 'login');
     }
   }
 }
